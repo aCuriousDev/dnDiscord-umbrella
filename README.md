@@ -64,7 +64,9 @@ New to the project? Start with [`docs/ONBOARDING.md`](./docs/ONBOARDING.md).
 See [`delivery/`](./delivery/) for milestone deliverables:
 
 - 50-word pitch (EN + FR)
+- Business plan
 - Communication strategy + visuals + channel captures
+- Cybersecurity plan
 - Legal feasibility study (EN + FR)
 - Playtest analytics
 

@@ -1,6 +1,6 @@
 # Delivery - DnDiscord POC
 
-Final deliverables for the DnDiscord POC: pitches, communication strategy, legal feasibility, playtest analytics, and demo material.
+Final deliverables for the DnDiscord POC: pitches, business plan, communication strategy, legal feasibility, cybersecurity plan, playtest analytics, and demo material.
 
 > Not source code - see `back/` and `front/` for that, and `docs/` for written project documentation.
 
@@ -34,6 +34,22 @@ Final deliverables for the DnDiscord POC: pitches, communication strategy, legal
   - [`Com07_reel.png`](./communication/Com07_reel.png) - Instagram reel
   - [`Com08_tiktok.png`](./communication/Com08_tiktok.png) - TikTok
   - [`Com06_reddit.png`](./communication/Com06_reddit.png) - Reddit thread
+
+---
+
+## Business
+
+[`business/`](./business/)
+
+- [`Business_Plan_DnDiscord.pdf`](./business/Business_Plan_DnDiscord.pdf) - business plan, market analysis, model
+
+---
+
+## Cybersecurity
+
+[`cyber/`](./cyber/)
+
+- [`Cybersecurity_Plan_DnDiscord.pdf`](./cyber/Cybersecurity_Plan_DnDiscord.pdf) - threat model, controls, incident response
 
 ---
 
