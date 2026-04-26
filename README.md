@@ -74,8 +74,11 @@ See [`delivery/`](./delivery/) for milestone deliverables:
 ## Mirror
 
 This repo is mirrored to the school repository at
-`EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord` at delivery milestones.
+`EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord`.
 The personal `aCuriousDev/dnDiscord-umbrella` is the source of truth.
+
+A GitHub Actions workflow auto-mirrors every push to `main`. See
+[`docs/SCHOOL_MIRROR_AUTOMATION.md`](./docs/SCHOOL_MIRROR_AUTOMATION.md) for setup, kill switch, and rotation.
 
 ## Children repos
 

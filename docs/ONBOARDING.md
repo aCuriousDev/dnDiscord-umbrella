@@ -87,7 +87,7 @@ Quick summary:
 1. Promote `dev` to `main` on the children, tag.
 2. In umbrella: `git submodule update --remote --merge` then commit pointer bumps.
 3. Drop deliverables into `delivery/` (PDFs, slides, captures).
-4. Push to personal `origin`, then mirror to school: `git push --mirror school`.
+4. Push to personal `origin`. A GitHub Actions workflow auto-mirrors `main` to the school repo. See [`SCHOOL_MIRROR_AUTOMATION.md`](./SCHOOL_MIRROR_AUTOMATION.md). Manual fallback: `git push --mirror school`.
 
 ## 8. Gotchas
 
