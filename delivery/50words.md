@@ -1,0 +1,1 @@
+DnDiscord turns your Discord server into an immersive D&D table. Gather your party, dive into stunning 3D adventures, and let the Dungeon Master craft unforgettable quests—all without leaving the app you already love. No downloads, no extra accounts, no setup hassle. Just pure tabletop magic shared with friends, anywhere.

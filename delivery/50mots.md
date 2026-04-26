@@ -1,0 +1,1 @@
+DnDiscord transforme votre serveur Discord en table de jeu de rôle. Rassemblez vos amis, plongez dans des aventures 3D époustouflantes et laissez le Maître du Donjon créer des quêtes inoubliables — sans jamais quitter Discord. Aucun téléchargement, aucun compte supplémentaire. Juste la magie du jeu de rôle, partagée entre amis, partout.
