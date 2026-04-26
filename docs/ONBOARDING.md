@@ -84,10 +84,9 @@ Day-to-day work happens in the child repos. The umbrella exists for milestone de
 
 Quick summary:
 
-1. Promote `dev` to `main` on the children, tag.
-2. In umbrella: `git submodule update --remote --merge` then commit pointer bumps.
-3. Drop deliverables into `delivery/` (PDFs, slides, captures).
-4. Push to personal `origin`. A GitHub Actions workflow auto-mirrors `main` to the school repo. See [`SCHOOL_MIRROR_AUTOMATION.md`](./SCHOOL_MIRROR_AUTOMATION.md). Manual fallback: `git push --mirror school`.
+1. Promote `dev` to `main` on the children, tag. A child workflow auto-bumps the umbrella's submodule pointer (see [`SUBMODULE_AUTOBUMP.md`](./SUBMODULE_AUTOBUMP.md)). Manual fallback: `git submodule update --remote --merge` in umbrella, then commit pointer bumps.
+2. Drop deliverables into `delivery/` (PDFs, slides, captures) and commit on the umbrella.
+3. Push umbrella to personal `origin`. A second workflow auto-mirrors `main` to the school repo (see [`SCHOOL_MIRROR_AUTOMATION.md`](./SCHOOL_MIRROR_AUTOMATION.md)). Manual fallback: `git push --mirror school`.
 
 ## 8. Gotchas
 

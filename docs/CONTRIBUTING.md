@@ -159,6 +159,10 @@ Quote any regex containing `{n,}` quantifiers. An unquoted brace is parsed as a 
 
 ## Releasing (children)
 
+> Auto-bump: once the `bump-umbrella` workflow lives on a child's `main` branch, any push to that `main` automatically updates the umbrella's submodule pointer and (via the umbrella) the school mirror. See [`SUBMODULE_AUTOBUMP.md`](./SUBMODULE_AUTOBUMP.md). The steps below remain the manual fallback.
+
+
+
 When `dev` is stable and ready to ship:
 
 1. Fast-forward `main` to `dev`: `git checkout main && git merge --ff-only dev`

@@ -77,8 +77,11 @@ This repo is mirrored to the school repository at
 `EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord`.
 The personal `aCuriousDev/dnDiscord-umbrella` is the source of truth.
 
-A GitHub Actions workflow auto-mirrors every push to `main`. See
-[`docs/SCHOOL_MIRROR_AUTOMATION.md`](./docs/SCHOOL_MIRROR_AUTOMATION.md) for setup, kill switch, and rotation.
+Two GitHub Actions workflows automate the delivery chain:
+- Each child repo (`back`, `front`, `landing`) auto-bumps the umbrella submodule pointer on push to `main`. See [`docs/SUBMODULE_AUTOBUMP.md`](./docs/SUBMODULE_AUTOBUMP.md).
+- The umbrella auto-mirrors every push to `main` to the school repo. See [`docs/SCHOOL_MIRROR_AUTOMATION.md`](./docs/SCHOOL_MIRROR_AUTOMATION.md).
+
+End-to-end: child `main` push -> umbrella `main` updated -> school repo mirrored.
 
 ## Children repos
 
