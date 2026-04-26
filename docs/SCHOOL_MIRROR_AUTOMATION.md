@@ -97,6 +97,18 @@ To find the old key's ID before rotation:
 gh api user/keys --jq '.[] | select(.title=="umbrella-mirror") | {id, created_at}'
 ```
 
+## Why the workflow guards on `github.repository`
+
+`git push --mirror` copies every ref including `refs/heads/main`, which means the `.github/workflows/` directory is replicated to the school repo. Without a guard, the school repo's copy of `mirror-to-school.yml` would fire on every mirror push, fail because `SCHOOL_SSH_KEY` is not set there, and pile up red runs.
+
+The job is gated by:
+
+```yaml
+if: ${{ github.repository == 'aCuriousDev/dnDiscord-umbrella' && vars.MIRROR_ENABLED != 'false' }}
+```
+
+When the workflow runs on the school clone (`github.repository == 'EpitechMscProPromo2026/...'`), the job is skipped cleanly and the run shows as "skipped" rather than "failed". Disabling Actions outright on the school repo would be cleaner but requires `admin` on that repo, which the project owner does not have.
+
 ## Troubleshooting
 
 | Symptom in workflow log | Likely cause | Fix |

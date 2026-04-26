@@ -14,7 +14,9 @@ concurrency:
 
 jobs:
   mirror:
-    if: ${{ vars.MIRROR_ENABLED != 'false' }}
+    # Only run on the source repo. The school clone receives this workflow file via mirror;
+    # this guard makes it a no-op there instead of a noisy red run on every mirror push.
+    if: ${{ github.repository == 'aCuriousDev/dnDiscord-umbrella' && vars.MIRROR_ENABLED != 'false' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
