@@ -76,7 +76,7 @@ i18n(legal): translate /privacy /terms /legal /cookies /login to English
 
 Keep the subject line under 72 characters. Body is optional - use it when the why is not obvious from the summary alone.
 
-Do not add `Co-Authored-By` lines or AI-generated attribution.
+Author is the account pushing the branch.
 
 ---
 
