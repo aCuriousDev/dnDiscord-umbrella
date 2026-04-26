@@ -1,8 +1,8 @@
-# DnDiscord — Umbrella Repository
+# DnDiscord - Umbrella Repository
 
-> Turn your Discord server into a D&D table. Stunning 3D adventures, no downloads, no extra accounts — just the magic of tabletop, shared with friends, anywhere.
+> Turn your Discord server into a D&D table. Stunning 3D adventures, no downloads, no extra accounts - just the magic of tabletop, shared with friends, anywhere.
 
-Parent repo for the DnDiscord POC (Epitech MSc Pro 2026 — T-ESP-902-96859).
+Parent repo for the DnDiscord POC (Epitech MSc Pro 2026 - T-ESP-902-96859).
 Wraps the backend, frontend, and landing-page repos as submodules, plus delivery and documentation folders.
 
 **Current release:** `v0.1.1` (back + front).
@@ -13,7 +13,7 @@ Wraps the backend, frontend, and landing-page repos as submodules, plus delivery
 dnDiscord-umbrella/
 ├── back/        ← submodule → aCuriousDev/epi-esp-back     (C# / .NET, SignalR, EF Core)
 ├── front/       ← submodule → aCuriousDev/epi-esp-front    (SolidJS / TS / Tailwind)
-├── landing/     ← submodule → aCuriousDev/epi-esp-landing  (PRIVATE — see below)
+├── landing/     ← submodule → aCuriousDev/epi-esp-landing  (PRIVATE - see below)
 ├── delivery/    ← final deliverables (pitch, comms, legal, playtest, demo)
 ├── docs/        ← project documentation (workflow, architecture)
 └── README.md    ← this file
@@ -21,10 +21,10 @@ dnDiscord-umbrella/
 
 ## Live Links
 
-- **Live app** — <https://dndiscord.cadran.app/>
-- **Landing page** — <https://dndiscord-landing.cadran.app/>
-- **Instagram** — <https://www.instagram.com/p/DXmXkZbCuql/>
-- **Reddit** — <https://www.reddit.com/r/Dndiscord_Off/>
+- **Live app** - <https://dndiscord.cadran.app/>
+- **Landing page** - <https://dndiscord-landing.cadran.app/>
+- **Instagram** - <https://www.instagram.com/p/DXmXkZbCuql/>
+- **Reddit** - <https://www.reddit.com/r/Dndiscord_Off/>
 
 ## Cloning
 
@@ -39,7 +39,7 @@ git submodule update --init --recursive
 ```
 
 > The `landing/` submodule points to a **private** repository. Without access, the
-> landing checkout will fail — that is expected. Skip it with:
+> landing checkout will fail - that is expected. Skip it with:
 > ```bash
 > git -c submodule.landing.update=none submodule update --init --recursive
 > ```
@@ -76,4 +76,4 @@ The personal `aCuriousDev/dnDiscord-umbrella` is the source of truth.
 
 - Backend: <https://github.com/aCuriousDev/epi-esp-back>
 - Frontend: <https://github.com/aCuriousDev/epi-esp-front>
-- Landing (private): <https://github.com/aCuriousDev/epi-esp-landing> — live at <https://dndiscord-landing.cadran.app/>
+- Landing (private): <https://github.com/aCuriousDev/epi-esp-landing> - live at <https://dndiscord-landing.cadran.app/>

@@ -33,13 +33,13 @@ git tag -a delivery-<name> -m "Delivery: <milestone-name>"
 # 6. Push to personal origin
 git push origin main --tags
 
-# 7. Mirror to school (this overwrites school refs — that is the intent)
+# 7. Mirror to school (this overwrites school refs - that is the intent)
 git push --mirror school
 ```
 
 ## Notes
 
 - `git push --mirror` is destructive on the target. Always push to `origin` first; treat `school` as derived.
-- Submodules pin to commit SHAs, not branches. `branch = main` in `.gitmodules` is metadata only — bump is explicit via `--remote`.
+- Submodules pin to commit SHAs, not branches. `branch = main` in `.gitmodules` is metadata only - bump is explicit via `--remote`.
 - Graders cloning the school repo MUST use `--recurse-submodules` (documented in root README).
 - HTTPS git access to the school repo is blocked by SAML SSO. SSH works because the SSH key is enrolled separately. If HTTPS is needed, authorize Git Credential Manager for the `EpitechMscProPromo2026` org via GitHub web settings.
