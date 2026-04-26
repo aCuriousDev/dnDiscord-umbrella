@@ -58,6 +58,9 @@ The full delivery procedure (pointer bumps, tagging, mirror push) is documented 
 [`docs/DELIVERY_WORKFLOW.md`](./docs/DELIVERY_WORKFLOW.md).
 
 New to the project? Start with [`docs/ONBOARDING.md`](./docs/ONBOARDING.md).
+
+For project context (PRD, timeline, team, plan-vs-POC pivot) see [`docs/PROJECT_HISTORY.md`](./docs/PROJECT_HISTORY.md).
+For how the team plans, syncs, codes, reviews and ships, see [`docs/WAYS_OF_WORKING.md`](./docs/WAYS_OF_WORKING.md).
 For the system overview, deployment, contribution rules, and glossary, see [`docs/`](./docs/).
 
 ## Delivery materials
