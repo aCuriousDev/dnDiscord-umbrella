@@ -19,14 +19,15 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Sanity check secret
-        env:
-          SCHOOL_PAT: ${{ secrets.SCHOOL_PAT }}
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SCHOOL_SSH_KEY }}
+
+      - name: Trust github.com host key
         run: |
-          if [ -z "$SCHOOL_PAT" ]; then
-            echo "::error::SCHOOL_PAT secret is not set. See docs/SCHOOL_MIRROR_AUTOMATION.md for setup."
-            exit 1
-          fi
+          mkdir -p ~/.ssh
+          ssh-keyscan -t ed25519,rsa github.com >> ~/.ssh/known_hosts
 
       - name: Bare clone of source repo
         env:
@@ -37,12 +38,9 @@ jobs:
             source.git
 
       - name: Mirror to school
-        env:
-          SCHOOL_PAT: ${{ secrets.SCHOOL_PAT }}
         run: |
           cd source.git
-          git remote add school \
-            "https://x-access-token:${SCHOOL_PAT}@github.com/EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord.git"
+          git remote add school git@github.com:EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord.git
           git push --mirror school
 
       - name: Summary

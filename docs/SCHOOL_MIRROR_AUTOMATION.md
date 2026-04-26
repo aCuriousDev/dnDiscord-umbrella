@@ -6,58 +6,49 @@ A GitHub Actions workflow at [`.github/workflows/mirror-to-school.yml`](../.gith
 
 On `push` to `main` (or manual `workflow_dispatch`):
 
-1. The runner does a bare clone of the umbrella over HTTPS using the auto-provided `GITHUB_TOKEN`.
-2. It adds the school repo as a second remote, authenticated via the `SCHOOL_PAT` secret.
-3. It runs `git push --mirror school`, which copies every ref (branches + tags) byte-for-byte.
+1. `webfactory/ssh-agent` loads the dedicated SSH key stored as the `SCHOOL_SSH_KEY` secret into the runner's ssh-agent.
+2. The runner does a bare HTTPS clone of the umbrella using the auto-provided `GITHUB_TOKEN`.
+3. It adds the school repo as an SSH remote and runs `git push --mirror school`. The push uses the SSH key registered on the project owner's GitHub account.
 
 Submodules are NOT cloned by the workflow. `git push --mirror` only ships the umbrella's own refs (gitlinks pointing at SHAs in the child repos). The school clone reaches the child repos directly when someone runs `git clone --recurse-submodules` against the school remote.
 
-## Why a PAT and not a deploy key
+## Why an SSH key, not a PAT or deploy key
 
-The school repo is owned by the `EpitechMscProPromo2026` org. Adding a deploy key requires `admin` permission on that repo, which the project owner does not have (only `push`, `pull`, `triage`). Fine-grained PAT is the next least-privileged option.
+| Option | Why ruled out |
+|---|---|
+| Fine-grained PAT | The `EpitechMscProPromo2026` org policy blocks PATs targeting org-owned repos. |
+| Deploy key on the school repo | Adding a deploy key needs `admin` on that repo. The project owner only has `push`. |
+| GitHub App | Requires org admin to install. Overkill for POC. |
+| **Dedicated SSH key on owner's account** | Works because SSH bypasses SAML once the key is SSO-authorized. Least friction available. |
 
-## One-time setup
+The trade-off: a personal SSH key is account-wide, not repo-scoped. It can push to any repo the owner can push to. Mitigations:
 
-### 1. Mint a fine-grained PAT
+- It is a dedicated key (named `umbrella-mirror`), not the owner's primary key. Easy to identify and revoke without touching daily workflows.
+- The private half lives only as a GitHub Actions secret, masked in logs, never written to disk by the workflow.
+- The workflow uses `permissions: contents: read` at the job level, so the auto-provided `GITHUB_TOKEN` cannot modify the umbrella repo.
 
-1. Go to <https://github.com/settings/personal-access-tokens/new>.
-2. Choose:
-   - **Token name:** `dnDiscord-umbrella school mirror`
-   - **Expiration:** 90 days (or however long the project still runs).
-   - **Resource owner:** `aCuriousDev` (your personal account).
-   - **Repository access:** "Only select repositories" -> pick `EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord` (yes, you can target a repo you do not own as long as you have `push` on it).
-   - **Repository permissions:**
-     - `Contents`: **Read and write**
-     - `Metadata`: Read (auto-selected)
-3. Generate. Copy the token (`github_pat_...`) immediately, it is shown once.
+## One-time setup (already done for current install)
 
-### 2. Authorize the PAT for SAML SSO
+The `umbrella-mirror` SSH key was generated, the public half registered on the project owner's GitHub account, and the private half stored as the `SCHOOL_SSH_KEY` secret on `aCuriousDev/dnDiscord-umbrella`. The remaining step the owner had to do interactively was the SSO authorization in the browser - covered in the next section in case the key needs to be re-authorized.
 
-The `EpitechMscProPromo2026` org enforces SAML. After generating the PAT:
+## Activate or re-authorize SSO
 
-1. Visit <https://github.com/settings/tokens?type=beta>.
-2. Find the new token, click **Configure SSO**.
-3. Authorize for `EpitechMscProPromo2026`.
+After registering the key (or any time the org SSO authorization for it lapses):
 
-Without this, the workflow gets `401` even with valid credentials.
+1. Open <https://github.com/settings/keys>.
+2. Find `umbrella-mirror` in the SSH keys list.
+3. Click **Configure SSO** -> **Authorize** for `EpitechMscProPromo2026`.
 
-### 3. Add the PAT as a repo secret
+Without this, the workflow gets `Permission denied (publickey)` even with a valid key.
 
-```bash
-gh secret set SCHOOL_PAT -R aCuriousDev/dnDiscord-umbrella
-# paste the token at the prompt
-```
-
-Or in the UI: <https://github.com/aCuriousDev/dnDiscord-umbrella/settings/secrets/actions>.
-
-### 4. Verify
+## Verify
 
 ```bash
 gh workflow run "Mirror to school" -R aCuriousDev/dnDiscord-umbrella
 gh run watch -R aCuriousDev/dnDiscord-umbrella
 ```
 
-Or just push any change to `main` and watch the run on the Actions tab.
+Or push any change to `main` and watch the run on the Actions tab. A green run means the school repo is now in sync with `aeed81e` or whatever the current `main` HEAD is.
 
 ## Disable temporarily
 
@@ -73,24 +64,48 @@ Re-enable:
 gh variable delete MIRROR_ENABLED -R aCuriousDev/dnDiscord-umbrella
 ```
 
-## Rotate the PAT
+## Rotate the SSH key
 
-PATs expire. When near expiry:
+The key has no expiry. Rotate when:
 
-1. Mint a fresh PAT (same scopes as setup step 1).
-2. Re-authorize SSO (step 2).
-3. Overwrite the secret: `gh secret set SCHOOL_PAT -R aCuriousDev/dnDiscord-umbrella`.
-4. Old PAT can be revoked at <https://github.com/settings/personal-access-tokens>.
+- The owner suspects the secret leaked.
+- The key needs broader or narrower access.
+- An audit calls for it.
+
+```bash
+# 1. Generate fresh key (no passphrase, dedicated label).
+ssh-keygen -t ed25519 -f /tmp/umbrella_mirror_key -N "" -C "umbrella-mirror"
+
+# 2. Register new public key.
+gh ssh-key add /tmp/umbrella_mirror_key.pub --title "umbrella-mirror"
+
+# 3. Re-authorize SSO (browser, see "Activate or re-authorize SSO" above).
+
+# 4. Update the secret.
+gh secret set SCHOOL_SSH_KEY -R aCuriousDev/dnDiscord-umbrella < /tmp/umbrella_mirror_key
+
+# 5. Wipe the local copy.
+rm -f /tmp/umbrella_mirror_key /tmp/umbrella_mirror_key.pub
+
+# 6. Delete the OLD key from GitHub.
+gh ssh-key list --json id,title | jq -r '.[] | select(.title=="umbrella-mirror-old") | .id' | xargs -I{} gh ssh-key delete {}
+```
+
+To find the old key's ID before rotation:
+
+```bash
+gh api user/keys --jq '.[] | select(.title=="umbrella-mirror") | {id, created_at}'
+```
 
 ## Troubleshooting
 
 | Symptom in workflow log | Likely cause | Fix |
 |---|---|---|
-| `SCHOOL_PAT secret is not set` | Secret missing | Setup step 3. |
-| `remote: Repository not found` over HTTPS | PAT not authorized for SAML | Setup step 2. |
-| `remote: Permission to ... denied` | PAT scoped to wrong repo or missing `Contents: write` | Re-mint with correct scopes. |
-| `error: failed to push some refs` with non-fast-forward | Someone pushed to school directly | Manual reconcile. School should never be pushed to outside this workflow. |
-| Job is skipped (no run) | `MIRROR_ENABLED=false` repo variable set | `gh variable delete MIRROR_ENABLED ...` |
+| `Error loading key: invalid format` (ssh-agent step) | `SCHOOL_SSH_KEY` secret was set with a malformed value (extra newline, BOM, public half pasted) | Re-set with `gh secret set SCHOOL_SSH_KEY -R aCuriousDev/dnDiscord-umbrella < <private-key-file>`. |
+| `Permission denied (publickey)` on push | SSO not authorized for the key on the org | Authorize at <https://github.com/settings/keys>. |
+| `Repository not found` | Org admin removed write access for `aCuriousDev` on the school repo | Coordinate with Epitech to restore. Until then, fall back to manual mirror. |
+| `error: failed to push some refs` non-fast-forward | Someone pushed to school directly | Manual reconcile. School should never be pushed to outside this workflow. |
+| Job is skipped (no run) | `MIRROR_ENABLED=false` repo variable is set | `gh variable delete MIRROR_ENABLED ...` |
 
 ## Manual fallback
 
@@ -101,11 +116,4 @@ cd Y:/Dev Bis/dnDiscord-umbrella
 git push --mirror school
 ```
 
-This requires the local `school` remote to be set and your personal SSH key SSO-authorized for the `EpitechMscProPromo2026` org.
-
-## Security notes
-
-- The PAT lives only as a GitHub Actions secret. It is masked in logs and never written to disk by the workflow.
-- The PAT is scoped to a single repo (`Contents: Read and write`). Compromise impact: someone could rewrite history on the school mirror, nothing else.
-- The workflow uses `permissions: contents: read` at the job level, so the auto-provided `GITHUB_TOKEN` cannot modify the umbrella repo.
-- The bare clone is in `$RUNNER_TEMP`-equivalent and discarded with the runner.
+This requires the local `school` remote to be set and the owner's primary SSH key SSO-authorized for the `EpitechMscProPromo2026` org.
