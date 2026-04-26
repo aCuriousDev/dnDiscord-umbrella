@@ -2,6 +2,8 @@
 
 How to ship a milestone from the umbrella repo to the school repo.
 
+> The school mirror is **automated** via GitHub Actions: every push to `main` on `aCuriousDev/dnDiscord-umbrella` triggers a mirror push to the school repo. See [`SCHOOL_MIRROR_AUTOMATION.md`](./SCHOOL_MIRROR_AUTOMATION.md). The manual `git push --mirror school` step below is the fallback path if the workflow is broken or the PAT has expired.
+
 ## Prerequisites
 
 - `main` on `epi-esp-back` and `epi-esp-front` reflects the state to deliver.
@@ -30,11 +32,13 @@ git commit -m "deliver: <milestone-name>"
 # 5. Tag the delivery
 git tag -a delivery-<name> -m "Delivery: <milestone-name>"
 
-# 6. Push to personal origin
+# 6. Push to personal origin (the GH Actions workflow takes it from here)
 git push origin main --tags
 
-# 7. Mirror to school (this overwrites school refs - that is the intent)
-git push --mirror school
+# 7. (Manual fallback only) Mirror to school directly
+#    Skip this if the GH Actions workflow is healthy. Use only when the
+#    automation is broken or you need an out-of-band push.
+# git push --mirror school
 ```
 
 ## Notes

@@ -1,0 +1,52 @@
+name: Mirror to school
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mirror-to-school
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    if: ${{ vars.MIRROR_ENABLED != 'false' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Sanity check secret
+        env:
+          SCHOOL_PAT: ${{ secrets.SCHOOL_PAT }}
+        run: |
+          if [ -z "$SCHOOL_PAT" ]; then
+            echo "::error::SCHOOL_PAT secret is not set. See docs/SCHOOL_MIRROR_AUTOMATION.md for setup."
+            exit 1
+          fi
+
+      - name: Bare clone of source repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git clone --bare \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" \
+            source.git
+
+      - name: Mirror to school
+        env:
+          SCHOOL_PAT: ${{ secrets.SCHOOL_PAT }}
+        run: |
+          cd source.git
+          git remote add school \
+            "https://x-access-token:${SCHOOL_PAT}@github.com/EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord.git"
+          git push --mirror school
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "Mirrored ${{ github.repository }}@${{ github.sha }} to EpitechMscProPromo2026/T-ESP-902-96859-LYO_DnDiscord" \
+            >> "$GITHUB_STEP_SUMMARY"

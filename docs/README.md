@@ -13,3 +13,4 @@ For final delivery artifacts (reports, slides) see `delivery/`. For source code 
 - [`GLOSSARY.md`](./GLOSSARY.md) - project-specific terms (DM, Hub, Activity, ASI, etc.) with code pointers.
 - [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md) - tokens, components, typography, motion, iconography, brand-asset prompts.
 - [`DELIVERY_WORKFLOW.md`](./DELIVERY_WORKFLOW.md) - milestone delivery procedure to the school repo.
+- [`SCHOOL_MIRROR_AUTOMATION.md`](./SCHOOL_MIRROR_AUTOMATION.md) - GitHub Actions workflow that auto-mirrors `main` to the school repo, plus PAT setup and rotation.
