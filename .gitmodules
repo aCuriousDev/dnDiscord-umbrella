@@ -1,0 +1,8 @@
+[submodule "back"]
+	path = back
+	url = git@github.com:aCuriousDev/epi-esp-back.git
+	branch = main
+[submodule "front"]
+	path = front
+	url = git@github.com:aCuriousDev/epi-esp-front.git
+	branch = main
