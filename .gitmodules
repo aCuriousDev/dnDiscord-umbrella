@@ -6,3 +6,7 @@
 	path = front
 	url = git@github.com:aCuriousDev/epi-esp-front.git
 	branch = main
+[submodule "landing"]
+	path = landing
+	url = git@github.com:aCuriousDev/epi-esp-landing.git
+	branch = main
