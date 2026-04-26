@@ -58,6 +58,7 @@ The full delivery procedure (pointer bumps, tagging, mirror push) is documented 
 [`docs/DELIVERY_WORKFLOW.md`](./docs/DELIVERY_WORKFLOW.md).
 
 New to the project? Start with [`docs/ONBOARDING.md`](./docs/ONBOARDING.md).
+For the system overview, deployment, contribution rules, and glossary, see [`docs/`](./docs/).
 
 ## Delivery materials
 
