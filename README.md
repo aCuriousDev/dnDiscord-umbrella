@@ -57,6 +57,8 @@ git submodule update --remote --merge
 The full delivery procedure (pointer bumps, tagging, mirror push) is documented in
 [`docs/DELIVERY_WORKFLOW.md`](./docs/DELIVERY_WORKFLOW.md).
 
+New to the project? Start with [`docs/ONBOARDING.md`](./docs/ONBOARDING.md).
+
 ## Delivery materials
 
 See [`delivery/`](./delivery/) for milestone deliverables:
